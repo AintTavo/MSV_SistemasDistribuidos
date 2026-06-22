@@ -1,0 +1,136 @@
+# ══════════════════════════════════════════════════════════════════
+#  PaTavo — Arquitectura de microservicios
+#  Front (Nginx) → Gateway → {user, dm, dungeon}-service → Postgres
+#  Las credenciales y puertos se inyectan vía .env (ver .env.example).
+#  El arranque se ordena con healthchecks (condition: service_healthy)
+#  para evitar 502 mientras un servicio aún no está listo.
+# ══════════════════════════════════════════════════════════════════
+
+# Nombre de proyecto explícito (evita colisión con otras carpetas "src").
+name: patavo-msv
+
+services:
+  # ── Base de datos compartida (una BD lógica por servicio) ───────
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-patavo}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-patavo}
+      POSTGRES_DB: ${POSTGRES_DB:-patavo}
+    volumes:
+      - patavo_ms_db:/var/lib/postgresql/data
+      # La etiqueta :z reetiqueta el bind-mount para SELinux (Fedora/RHEL).
+      - ./db-init:/docker-entrypoint-initdb.d:ro,z
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-patavo}"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  # ── Servicio de usuarios / mesas / personajes ──────────────────
+  user-service:
+    build: ./user-service
+    restart: unless-stopped
+    environment:
+      PGHOST: db
+      PGUSER: ${POSTGRES_USER:-patavo}
+      PGPASSWORD: ${POSTGRES_PASSWORD:-patavo}
+      PGDATABASE: user_db
+      JWT_SECRET: ${JWT_SECRET:-patavo-shared-secret}
+      PORT: 4001
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:4001/api/health || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 5s
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # ── Servicio del Dungeon Master (historias, grimorio, bestiario) ─
+  dm-service:
+    build: ./dm-service
+    restart: unless-stopped
+    environment:
+      PGHOST: db
+      PGUSER: ${POSTGRES_USER:-patavo}
+      PGPASSWORD: ${POSTGRES_PASSWORD:-patavo}
+      PGDATABASE: dm_db
+      JWT_SECRET: ${JWT_SECRET:-patavo-shared-secret}
+      USER_SERVICE_URL: http://user-service:4001
+      PORT: 4002
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:4002/api/health || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 5s
+    depends_on:
+      db:
+        condition: service_healthy
+      user-service:
+        condition: service_healthy
+
+  # ── Servicio del modo mazmorra en tiempo real (Socket.IO) ──────
+  dungeon-service:
+    build: ./dungeon-service
+    restart: unless-stopped
+    environment:
+      PGHOST: db
+      PGUSER: ${POSTGRES_USER:-patavo}
+      PGPASSWORD: ${POSTGRES_PASSWORD:-patavo}
+      PGDATABASE: dungeon_db
+      JWT_SECRET: ${JWT_SECRET:-patavo-shared-secret}
+      USER_SERVICE_URL: http://user-service:4001
+      PORT: 4003
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:4003/api/health || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 5s
+    depends_on:
+      db:
+        condition: service_healthy
+      user-service:
+        condition: service_healthy
+
+  # ── API Gateway (proxy + composición de /api/sync) — interno ───
+  gateway:
+    build: ./gateway
+    restart: unless-stopped
+    environment:
+      USER_SERVICE_URL: http://user-service:4001
+      DM_SERVICE_URL: http://dm-service:4002
+      DUNGEON_SERVICE_URL: http://dungeon-service:4003
+      PORT: 8080
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/api/health || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 5s
+    depends_on:
+      user-service:
+        condition: service_healthy
+      dm-service:
+        condition: service_healthy
+      dungeon-service:
+        condition: service_healthy
+
+  # ── Nginx: sirve el front (gateway/public) y proxya la API ─────
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "${WEB_PORT:-8080}:80"
+    depends_on:
+      gateway:
+        condition: service_healthy
+
+volumes:
+  patavo_ms_db:

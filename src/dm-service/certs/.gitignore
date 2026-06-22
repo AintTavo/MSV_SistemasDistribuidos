@@ -1,0 +1,2 @@
+# CA local del proxy (no versionar). Coloca aquí tu .crt corporativa si lo necesitas.
+*.crt

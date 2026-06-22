@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#1a1228" />
+  <title>AppPaTavo · Gestor de Parties D&D</title>
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="icon" href="/icon.svg" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div id="app">
+    <div class="boot">Cargando AppPaTavo…</div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    // sql.js (SQLite en el navegador) para el modo offline de la PWA.
+    window.SQL_WASM_BASE = 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/';
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/offline.js"></script>
+  <script src="/js/dungeon.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>

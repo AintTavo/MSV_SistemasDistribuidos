@@ -1,0 +1,13 @@
+# Dependencias
+node_modules/
+
+# Variables de entorno con secretos (usa .env.example como plantilla)
+.env
+**/.env
+
+# Logs y temporales
+*.log
+npm-debug.log*
+
+# Datos locales
+data/

@@ -1,0 +1,12 @@
+{
+  "name": "AppPaTavo - Gestor de Parties D&D",
+  "short_name": "AppPaTavo",
+  "description": "Gestiona personajes, historias y mazmorras de Dungeons & Dragons.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1228",
+  "theme_color": "#1a1228",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
