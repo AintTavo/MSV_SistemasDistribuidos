@@ -1,4 +1,4 @@
-# PaTavo — Microservicios
+# El mapa del aventurero — Microservicios
 
 La misma aplicación de mesas de **D&D** que el monolito `api/`, pero descompuesta
 en servicios independientes que se comunican por HTTP/JSON y un **API Gateway**.

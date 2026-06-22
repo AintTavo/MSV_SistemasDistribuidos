@@ -74,7 +74,7 @@ CODE=$(curl -s -o /dev/null -w '%{http_code}' "$BASE/api/characters")
 check "$CODE" "401" "rutas protegidas exigen login"
 
 echo "==> PWA servida por el gateway"
-HASUI=$(curl -sf "$BASE/" | grep -q 'AppPaTavo' && echo 1 || echo 0)
+HASUI=$(curl -sf "$BASE/" | grep -q 'El mapa del aventurero' && echo 1 || echo 0)
 check "$HASUI" "1" "frontend PWA servido"
 
 echo ""

@@ -1,4 +1,4 @@
-// ============ AppPaTavo SPA ============
+// ============ El mapa del aventurero SPA ============
 const App = (() => {
   const root = document.getElementById('app');
   let mode = localStorage.getItem('patavo_mode') || 'user'; // 'user' | 'dm' (intercambiable)
@@ -82,7 +82,7 @@ const App = (() => {
     root.innerHTML = `
       <div class="auth-wrap">
         <div class="card">
-          <h1>⚔️ AppPaTavo</h1>
+          <h1>⚔️ El mapa del aventurero</h1>
           <p class="meta" style="text-align:center">Gestor de parties de Dungeons & Dragons</p>
           <div id="auth-form"></div>
           <p class="meta" style="text-align:center;margin-top:1rem">
@@ -133,7 +133,7 @@ const App = (() => {
       <a href="#/bestiary" data-route="bestiary">🐉 Bestiario</a>`;
     root.innerHTML = `
       <header class="topbar">
-        <span class="brand">⚔️ AppPaTavo <small>· ${esc(API.user.username)}</small></span>
+        <span class="brand">⚔️ El mapa del aventurero <small>· ${esc(API.user.username)}</small></span>
         <div class="mode-toggle">
           <button data-mode="user" class="${mode === 'user' ? 'active' : ''}">Usuario</button>
           <button data-mode="dm" class="${mode === 'dm' ? 'active' : ''}">Dungeon Master</button>

@@ -1,6 +1,6 @@
 {
-  "name": "AppPaTavo - Gestor de Parties D&D",
-  "short_name": "AppPaTavo",
+  "name": "El mapa del aventurero - Gestor de Parties D&D",
+  "short_name": "El mapa del aventurero",
   "description": "Gestiona personajes, historias y mazmorras de Dungeons & Dragons.",
   "start_url": "/",
   "display": "standalone",
