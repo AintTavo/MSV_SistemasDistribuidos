@@ -4,7 +4,7 @@
 const Offline = (() => {
   let SQL = null;
   let db = null;
-  const IDB_NAME = 'patavo-sqlite';
+  const IDB_NAME = 'mapa-aventurero-sqlite';
   const IDB_STORE = 'kv';
 
   function idb() {

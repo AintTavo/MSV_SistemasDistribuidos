@@ -1,7 +1,7 @@
 // ============ El mapa del aventurero SPA ============
 const App = (() => {
   const root = document.getElementById('app');
-  let mode = localStorage.getItem('patavo_mode') || 'user'; // 'user' | 'dm' (intercambiable)
+  let mode = localStorage.getItem('mapa-aventurero_mode') || 'user'; // 'user' | 'dm' (intercambiable)
   let online = navigator.onLine;
   let offlineReady = false;
 
@@ -147,7 +147,7 @@ const App = (() => {
         <main class="content" id="view"></main>
       </div>`;
     root.querySelectorAll('.mode-toggle button').forEach((b) => {
-      b.onclick = () => { mode = b.dataset.mode; localStorage.setItem('patavo_mode', mode); Dungeon.leave(); renderShell(); location.hash = mode === 'user' ? '#/characters' : '#/parties'; };
+      b.onclick = () => { mode = b.dataset.mode; localStorage.setItem('mapa-aventurero_mode', mode); Dungeon.leave(); renderShell(); location.hash = mode === 'user' ? '#/characters' : '#/parties'; };
     });
     document.getElementById('btn-logout').onclick = () => { API.clear(); Dungeon.leave(); renderAuth(); };
     netChanged();

@@ -1,5 +1,5 @@
 # ══════════════════════════════════════════════════════════════════
-#  PaTavo — Arquitectura de microservicios
+#  El mapa del aventurero — Arquitectura de microservicios
 #  Front (Nginx) → Gateway → {user, dm, dungeon}-service → Postgres
 #  Las credenciales y puertos se inyectan vía .env (ver .env.example).
 #  El arranque se ordena con healthchecks (condition: service_healthy)
@@ -7,7 +7,7 @@
 # ══════════════════════════════════════════════════════════════════
 
 # Nombre de proyecto explícito (evita colisión con otras carpetas "src").
-name: patavo-msv
+name: mapa-aventurero-msv
 
 services:
   # ── Base de datos compartida (una BD lógica por servicio) ───────
@@ -15,15 +15,15 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-patavo}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-patavo}
-      POSTGRES_DB: ${POSTGRES_DB:-patavo}
+      POSTGRES_USER: ${POSTGRES_USER:-mapa-aventurero}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mapa-aventurero}
+      POSTGRES_DB: ${POSTGRES_DB:-mapa-aventurero}
     volumes:
-      - patavo_ms_db:/var/lib/postgresql/data
+      - mapa-aventurero_ms_db:/var/lib/postgresql/data
       # La etiqueta :z reetiqueta el bind-mount para SELinux (Fedora/RHEL).
       - ./db-init:/docker-entrypoint-initdb.d:ro,z
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-patavo}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-mapa-aventurero}"]
       interval: 3s
       timeout: 3s
       retries: 20
@@ -34,10 +34,10 @@ services:
     restart: unless-stopped
     environment:
       PGHOST: db
-      PGUSER: ${POSTGRES_USER:-patavo}
-      PGPASSWORD: ${POSTGRES_PASSWORD:-patavo}
+      PGUSER: ${POSTGRES_USER:-mapa-aventurero}
+      PGPASSWORD: ${POSTGRES_PASSWORD:-mapa-aventurero}
       PGDATABASE: user_db
-      JWT_SECRET: ${JWT_SECRET:-patavo-shared-secret}
+      JWT_SECRET: ${JWT_SECRET:-mapa-aventurero-shared-secret}
       PORT: 4001
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:4001/api/health || exit 1"]
@@ -55,10 +55,10 @@ services:
     restart: unless-stopped
     environment:
       PGHOST: db
-      PGUSER: ${POSTGRES_USER:-patavo}
-      PGPASSWORD: ${POSTGRES_PASSWORD:-patavo}
+      PGUSER: ${POSTGRES_USER:-mapa-aventurero}
+      PGPASSWORD: ${POSTGRES_PASSWORD:-mapa-aventurero}
       PGDATABASE: dm_db
-      JWT_SECRET: ${JWT_SECRET:-patavo-shared-secret}
+      JWT_SECRET: ${JWT_SECRET:-mapa-aventurero-shared-secret}
       USER_SERVICE_URL: http://user-service:4001
       PORT: 4002
     healthcheck:
@@ -79,10 +79,10 @@ services:
     restart: unless-stopped
     environment:
       PGHOST: db
-      PGUSER: ${POSTGRES_USER:-patavo}
-      PGPASSWORD: ${POSTGRES_PASSWORD:-patavo}
+      PGUSER: ${POSTGRES_USER:-mapa-aventurero}
+      PGPASSWORD: ${POSTGRES_PASSWORD:-mapa-aventurero}
       PGDATABASE: dungeon_db
-      JWT_SECRET: ${JWT_SECRET:-patavo-shared-secret}
+      JWT_SECRET: ${JWT_SECRET:-mapa-aventurero-shared-secret}
       USER_SERVICE_URL: http://user-service:4001
       PORT: 4003
     healthcheck:
@@ -133,4 +133,4 @@ services:
         condition: service_healthy
 
 volumes:
-  patavo_ms_db:
+  mapa-aventurero_ms_db:

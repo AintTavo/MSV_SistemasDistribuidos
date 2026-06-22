@@ -2,7 +2,7 @@
 // Estrategia NETWORK-FIRST: estando en línea siempre se sirve la versión más
 // reciente (y se refresca la caché); sin conexión se usa la copia cacheada.
 // Esto evita que quede "pegado" código antiguo tras una actualización.
-const CACHE = 'patavo-v2';
+const CACHE = 'mapa-aventurero-v2';
 const SHELL = [
   '/',
   '/index.html',

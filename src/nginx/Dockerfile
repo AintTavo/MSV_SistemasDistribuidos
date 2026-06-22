@@ -1,4 +1,4 @@
-# ── PaTavo (microservicios) — Imagen Nginx para el front-end ──────
+# ── El mapa del aventurero (microservicios) — Imagen Nginx para el front-end ──────
 # El contexto de build es msv/src (ver docker-compose.yml) para poder
 # copiar tanto el front del gateway como la configuración de nginx.
 FROM nginx:1.27-alpine

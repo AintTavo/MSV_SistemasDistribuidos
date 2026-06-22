@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # ══════════════════════════════════════════════════════════════════
-#  PaTavo — Microservicios  ·  Instalador automático
+#  El mapa del aventurero — Microservicios  ·  Instalador automático
 #  En una máquina limpia (Debian/Ubuntu o Fedora/RHEL):
 #      chmod +x install.sh && ./install.sh
 #  Instala Docker + Docker Compose, prepara el .env y levanta todo.
 # ══════════════════════════════════════════════════════════════════
 set -euo pipefail
 
-APP_NAME="PaTavo Microservicios (msv)"
+APP_NAME="El mapa del aventurero Microservicios (msv)"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 COMPOSE_DIR="${SCRIPT_DIR}/src"
 PKG=""

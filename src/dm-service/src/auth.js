@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const SECRET = process.env.JWT_SECRET || 'patavo-shared-secret';
+const SECRET = process.env.JWT_SECRET || 'mapa-aventurero-shared-secret';
 
 const USER_SERVICE_URL = process.env.USER_SERVICE_URL || 'http://user-service:4001';
 
